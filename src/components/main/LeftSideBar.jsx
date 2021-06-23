@@ -7,6 +7,7 @@ import { setSortedProducts, setUserSearch } from '@store/filterReducer';
 export const LeftSideBar = () => {
     const [filteredCategories, setFilteredCategories] = useState([]);
     const [productsList, setProductsList] = useState([]);
+    const [price, setPrice] = useState('');
     const fetchedProducts = useSelector(state => state.data.fetchedProducts);
     const sortedProductsList = useSelector(state => state.sort.sortedProductsList);
     const dispatch = useDispatch();
@@ -31,12 +32,15 @@ export const LeftSideBar = () => {
         const price = e.target.value.trim();
         const payload = productsList.filter(item => item.price <= price);
 
+        setPrice(price);
+
         if (payload.length) dispatch(setSortedProducts(payload));
     };
 
     const reset = () => {
         dispatch(setSortedProducts(fetchedProducts));
         dispatch(setUserSearch(''));
+        setPrice('');
     };
 
     return (
@@ -56,7 +60,7 @@ export const LeftSideBar = () => {
                 <section>
                     <h1>Цена:</h1>
                     <div className="price">
-                        Товары до: <input type="number" step="1" min="1" onChange={priceHandler} />
+                        Товары до: <input value={price} type="number" step="1" min="1" onChange={priceHandler} />
                     </div>
                 </section>
                 <Link to="/" onClick={reset}>На главную</Link>
